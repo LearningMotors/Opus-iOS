@@ -23,9 +23,9 @@
 #  Choose your libopus version and your currently-installed iOS SDK version:
 #
 VERSION="1.3"
-SDKVERSION="10.2"
+SDKVERSION="14.4"
 MINIOSVERSION="8.0"
-
+OPUSGITSHA="d633f523e36e3b6d01cc6d57386458d770d618be"
 ###########################################################################
 #
 # Don't change anything under this line!
@@ -78,13 +78,14 @@ cd $SRCDIR
 set -e
 
 if [ ! -e "${SRCDIR}/opus-${VERSION}.tar.gz" ]; then
-	echo "Downloading opus-${VERSION}.tar.gz"
-	curl -LO http://downloads.xiph.org/releases/opus/opus-${VERSION}.tar.gz
+	echo "Cloning git@github.com:xiph/opus.git"
+  git clone git@github.com:xiph/opus.git
+  cd opus && git checkout ${OPUSGITSHA} && ./autogen.sh
+	# curl -LO http://downloads.xiph.org/releases/opus/opus-${VERSION}.tar.gz
 fi
-echo "Using opus-${VERSION}.tar.gz"
+echo "Using opus ${OPUSGITSHA}"
 
-tar zxf opus-${VERSION}.tar.gz -C $SRCDIR
-cd "${SRCDIR}/opus-${VERSION}"
+cd "${SRCDIR}/opus"
 
 set +e # don't bail out of bash script if ccache doesn't exist
 CCACHE=`which ccache`
@@ -117,7 +118,7 @@ do
     --prefix="${INTERDIR}/${PLATFORM}${SDKVERSION}-${ARCH}.sdk" \
     LDFLAGS="$LDFLAGS ${OPT_LDFLAGS} -fPIE -miphoneos-version-min=${MINIOSVERSION} -L${OUTPUTDIR}/lib" \
     CFLAGS="$CFLAGS ${EXTRA_CFLAGS} ${OPT_CFLAGS} -fPIE -miphoneos-version-min=${MINIOSVERSION} -I${OUTPUTDIR}/include -isysroot ${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer/SDKs/${PLATFORM}${SDKVERSION}.sdk" \
-
+	
     # Build the application and install it to the fake SDK intermediary dir
     # we have set up. Make sure to clean up afterward because we will re-use
     # this source tree to cross-compile other targets.
@@ -175,6 +176,6 @@ done
 
 echo "Building done."
 echo "Cleaning up..."
-rm -fr ${INTERDIR}
-rm -fr "${SRCDIR}/opus-${VERSION}"
+# rm -fr ${INTERDIR}
+# rm -fr "${SRCDIR}/opus-${VERSION}"
 echo "Done."
