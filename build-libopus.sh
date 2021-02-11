@@ -24,7 +24,7 @@
 #
 VERSION="1.3"
 SDKVERSION="14.4"
-MINIOSVERSION="8.0"
+MINIOSVERSION="11.0"
 OPUSGITSHA="d633f523e36e3b6d01cc6d57386458d770d618be"
 ###########################################################################
 #
@@ -77,12 +77,13 @@ cd $SRCDIR
 # Exit the script if an error happens
 set -e
 
-if [ ! -e "${SRCDIR}/opus-${VERSION}.tar.gz" ]; then
-	echo "Cloning git@github.com:xiph/opus.git"
-  git clone git@github.com:xiph/opus.git
-  cd opus && git checkout ${OPUSGITSHA} && ./autogen.sh
+# The if condition is from the original build file, we are going to clone from xiph instead, to get a particular commit SHA
+# if [ ! -e "${SRCDIR}/opus-${VERSION}.tar.gz" ]; then
+echo "Cloning git@github.com:xiph/opus.git"
+git clone git@github.com:xiph/opus.git
+cd opus && git checkout ${OPUSGITSHA} && ./autogen.sh
 	# curl -LO http://downloads.xiph.org/releases/opus/opus-${VERSION}.tar.gz
-fi
+# fi
 echo "Using opus ${OPUSGITSHA}"
 
 cd "${SRCDIR}/opus"
