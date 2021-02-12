@@ -9,5 +9,5 @@ Pod::Spec.new do |spec|
   spec.requires_arc = true
   spec.license = { :type => "MIT", :file => "LICENSE" }
   # s.source_files = 'built/lib/*.{h,m,swift}'
-  s.vendored_libraries = 'built/iPhoneSimulator14.4-x86_64.sdk/lib/*.a'
+  spec.vendored_libraries = 'built/iPhoneSimulator14.4-x86_64.sdk/lib/*.a'
 end
