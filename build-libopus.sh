@@ -24,7 +24,7 @@
 #
 VERSION="1.3"
 SDKVERSION="14.4"
-MINIOSVERSION="11.0"
+MINIOSVERSION="8.0"
 OPUSGITSHA="d633f523e36e3b6d01cc6d57386458d770d618be"
 ###########################################################################
 #
@@ -86,8 +86,7 @@ cd opus && git checkout ${OPUSGITSHA} && ./autogen.sh
 # fi
 echo "Using opus ${OPUSGITSHA}"
 
-cd "${SRCDIR}/opus"
-
+echo "Working out of : ${PWD}"
 set +e # don't bail out of bash script if ccache doesn't exist
 CCACHE=`which ccache`
 if [ $? == "0" ]; then
